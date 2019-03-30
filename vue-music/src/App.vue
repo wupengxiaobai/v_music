@@ -1,26 +1,40 @@
 <template>
   <div id="app">
+    <m-header></m-header>
     <tab></tab>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view class="content"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-import Tab from "components/tab/tab";
+import MHeader from "components/common/m-header/MHeader.vue";
+import Tab from "components/tab/Tab";
 export default {
   name: "app",
   components: {
+    MHeader,
     Tab
   }
 };
 </script>
 <style lang="stylus">
+@import 'common/stylus/index.styl';
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    flex: 1;
+    overflow: hidden;
+  }
 }
 </style>
