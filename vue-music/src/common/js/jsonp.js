@@ -7,14 +7,13 @@
  */
 import originJSONP from 'jsonp'
 
-
 /**
  * 重写依赖jsonp -> promise 化
  * @param {*} url 纯净的url地址
  * @param {*} data 需要拼接到url地址上的数据
- * @param {*} option 
+ * @param {*} option 参数
  */
-export default function json(url, data, option) {
+export default function jsonp(url, data, option) {
   url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
 
   return new Promise((resolve, reject) => {

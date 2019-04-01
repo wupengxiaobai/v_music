@@ -8,8 +8,8 @@ function resolve(dir) {
 module.exports = {
   devServer: {
     before(app) {
+      // 获取推荐数据
       app.get('/getRocommend', async (req, res) => {
-        // console.log('req.query--', req.query)
         let ret = await axios({
           method: 'get',
           params: req.query,
@@ -21,10 +21,27 @@ module.exports = {
         }).then(res => {
           return res.data
         }).catch(err => {
-          console.log(err)
+          console.log('err--', err)
         })
         res.send(ret)
-      })
+      });
+      // 获取排行榜单数据
+      app.get('/getRanking', async (req, res) => {
+        let ret = await axios({
+          method: 'get',
+          params: req.query,
+          url: 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg',
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          }
+        }).then(res => {
+          return res.data
+        }).catch(err => {
+          console.log('err--', err)
+        })
+        res.send(ret)
+      });
     }
   },
   //   webpack 配置相对路径
