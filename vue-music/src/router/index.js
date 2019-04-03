@@ -10,7 +10,11 @@ let routes = [{
   component: () => import('components/recommend/recommend')
 }, {
   path: '/singer',
-  component: () => import('components/singer/singer')
+  component: () => import('components/singer/singer'),
+  children: [{
+    path: ':id',
+    component: () => import('components/singer/singer-detail')
+  }]
 }, {
   path: '/ranking',
   component: () => import('components/ranking/Ranking')

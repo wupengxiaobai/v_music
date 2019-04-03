@@ -1,16 +1,18 @@
 <template>
   <div class="singer">
     <loading v-if="!singersData.length"></loading>
-    <list-view :data="singersData"></list-view>
+    <list-view @selectItem="selectSinger" :data="singersData"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import listView from "components/base/listview/listview.vue";
+import { mapMutations } from "vuex";
 import Loading from "components/base/loading/loading.vue";
+import listView from "components/base/listview/listview.vue";
 import { getSinger } from "api/singer.js";
 import { ERR_OK } from "api/config";
-import Singer from "common/js/singer";
+import {Singer} from "common/js/singer";
 const HOT_NAME = "热门";
 const HOT_SINGER_LEN = 10;
 
@@ -21,6 +23,14 @@ export default {
     };
   },
   methods: {
+    //   歌手详情选择路由切换
+    selectSinger(singer) {
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      });
+      //   提交歌手到vuex的数据仓库中
+      this.setSinger(singer);
+    },
     //  获取数据
     _getSingerData() {
       getSinger().then(res => {
@@ -77,7 +87,10 @@ export default {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0);
       });
       return hot.concat(ret);
-    }
+    },
+    ...mapMutations({
+      setSinger: "SET_SINGER"
+    })
   },
   created() {
     this._getSingerData();

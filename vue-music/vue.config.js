@@ -42,6 +42,19 @@ module.exports = {
         })
         res.send(ret)
       });
+      // 获取歌手专辑数据
+      app.get('/getSingerZJ', async (req, res) => {
+        let ret = await axios({
+          method: 'get',
+          params: req.query,
+          url: 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+        }).then(res => {
+          return res.data
+        }).catch(err => {
+          console.log('err--', err)
+        })
+        res.send(ret)
+      })
     }
   },
   //   webpack 配置相对路径

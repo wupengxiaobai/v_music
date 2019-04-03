@@ -12,7 +12,12 @@
       <li v-for="(group,index) in data" :key="index" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
-          <li v-for="(item,itemIndex) in group.items" :key="itemIndex" class="list-group-item">
+          <li
+            v-for="(item, itemIndex) in group.items"
+            :key="itemIndex"
+            class="list-group-item"
+            @click="selectItem(item)"
+          >
             <img class="avatar" v-lazy="item.avatar" alt>
             <span class="name">{{ item.name }}</span>
           </li>
@@ -64,6 +69,10 @@ export default {
     };
   },
   methods: {
+    //   事件派发给外部, 传递当前点击的元素
+    selectItem(item) {
+      this.$emit("selectItem", item);
+    },
     //   点击至位置
     onShortcutTouchStart(e) {
       //  获取当前节点的data-index值
@@ -165,7 +174,8 @@ export default {
         return;
       }
       this.fixedTop = fixedTop;
-      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`;
+      this.diff &&
+        (this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`);
     }
   },
   components: {
@@ -187,7 +197,7 @@ export default {
   position: relative;
   height: 100%;
   overflow: hidden;
-  z-index: 2222;
+  z-index: 99;
 
   .list-group {
     height: 100%;

@@ -7,7 +7,6 @@ export const commonParams = {
   notice: 0,
 }
 
-
 export const options = {
   param: 'jsonpCallback'
 }
