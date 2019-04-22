@@ -22,6 +22,12 @@
       <h4>常用依赖</h4>
       <router-link to="/fastclick">fastclick依赖的使用</router-link>|
       <router-link to="/lazyload">lazyLoad依赖的使用</router-link>|
+      <router-link to="/jsBase64">jsBase64依赖的使用</router-link>|
+      <router-link to="/createanimationkeyframe">create-keyframe-animation 的使用</router-link>|
+
+
+
+      
     </div>
     <router-view/>
   </div>

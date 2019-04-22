@@ -71,6 +71,22 @@ export default new Router({
             path: '/commonjs',
             name: 'commonjs',
             component: () => import('./views/CommonJs.vue')
+        }, {
+            path: '/fastclick',
+            name: 'fastclick',
+            component: () => import('./views/FastClick.vue')
+        }, {
+            path: '/lazyload',
+            name: 'lazyload',
+            component: () => import('./views/LazyLoad.vue')
+        }, {
+            path: '/jsbase64',
+            name: 'jsbase64',
+            component: () => import('./views/JsBase64.vue')
+        }, {
+            path: '/createanimationkeyframe',
+            name: 'createanimationkeyframe',
+            component: () => import('./views/CreateAnimationKeyFrame.vue')
         }
         
     ]
