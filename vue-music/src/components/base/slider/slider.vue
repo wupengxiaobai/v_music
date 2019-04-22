@@ -9,7 +9,6 @@
         :class="{'active': currentPageIndex == dotIndex}"
         v-for="(dot,dotIndex) in dots"
         :key="dotIndex"
-        @click="_goTo(dotIndex)"
       ></div>
     </div>
   </div>

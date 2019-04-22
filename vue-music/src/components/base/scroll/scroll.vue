@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" ref="wrapper">
+  <div class="wrapper" ref="scroll-component-wrapper">
     <slot></slot>
   </div>
 </template>
@@ -27,24 +27,49 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    //  是否开启上拉加载
+    pullup: {
+      type: Boolean,
+      default: false
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false
+    },
+    // 默认refresh延迟时间
+    delayTime: {
+      type: Number,
+      defalut: 20
     }
   },
   methods: {
     //   初始化bscroll
     _initScroll() {
-      //   console.log(this.$refs.wrapper);
-      if (!this.$refs.wrapper) {
+      if (!this.$refs["scroll-component-wrapper"]) {
         return;
       }
-      this.scroll = new BScroll(this.$refs.wrapper, {
+      this.scroll = new BScroll(this.$refs["scroll-component-wrapper"], {
         probeType: this.probeType,
         click: this.click
       });
       // 如果需要监听scroll事件, 派发scroll事件
       if (this.listenScroll) {
-        let self = this;
         this.scroll.on("scroll", pos => {
-          self.$emit("scroll", pos);
+          this.$emit("scroll", pos);
+        });
+      }
+      //  上拉加载
+      if (this.pullup) {
+        this.scroll.on("scrollEnd", () => {
+          if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+            this.$emit("scrollToEnd");
+          }
+        });
+      }
+      if (this.beforeScroll) {
+        this.scroll.on("beforeScrollStart", () => {
+          this.$emit("beforeScroll");
         });
       }
     },
@@ -75,11 +100,10 @@ export default {
     data() {
       setTimeout(() => {
         this.refresh();
-      }, 20);
+      }, this.delayTime);
     }
   }
 };
 </script>
 
-<style lang="stylus" scoped>
-</style>
+<style lang="stylus" scoped></style>

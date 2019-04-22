@@ -4,6 +4,9 @@
       <div class="logo"></div>
       <h2>Chicken Music</h2>
     </div>
+    <router-link tag="div" to="/user" class="user">
+      <span class="icon-mine"></span>
+    </router-link>
   </div>
 </template>
 
@@ -34,6 +37,18 @@
       font-size: 18px;
       color: $color-theme;
     }
+  }
+
+  .user {
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    line-height: 44px;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+    color: $color-theme;
   }
 }
 </style>

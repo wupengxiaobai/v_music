@@ -1,28 +1,35 @@
 <template>
-  <div class="singer">
+  <div class="singer" ref="singer">
     <loading v-if="!singersData.length"></loading>
-    <list-view @selectItem="selectSinger" :data="singersData"></list-view>
+    <list-view ref="list" @selectItem="selectSinger" :data="singersData"></list-view>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { playlistMiXin } from "common/js/mixin.js";
 import { mapMutations } from "vuex";
 import Loading from "components/base/loading/loading.vue";
 import listView from "components/base/listview/listview.vue";
 import { getSinger } from "api/singer.js";
 import { ERR_OK } from "api/config";
-import {Singer} from "common/js/singer";
+import { Singer } from "common/js/singer";
 const HOT_NAME = "热门";
 const HOT_SINGER_LEN = 10;
 
 export default {
+  mixins: [playlistMiXin],
   data() {
     return {
       singersData: []
     };
   },
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.singer.style.bottom = bottom;
+      this.$refs.list.refresh();
+    },
     //   歌手详情选择路由切换
     selectSinger(singer) {
       this.$router.push({
@@ -36,6 +43,7 @@ export default {
       getSinger().then(res => {
         if (res.code === ERR_OK) {
           this.singersData = this._normalizeSinger(res.data.list);
+          console.log(this.singersData)
         }
       });
     },
@@ -104,6 +112,10 @@ export default {
 
 <style lang="stylus" scoped>
 .singer {
-  flex: 1;
+  position: fixed;
+  width: 100%;
+  top: 88px;
+  bottom: 0;
+  // flex: 1;
 }
 </style>

@@ -5,11 +5,12 @@
 </template>
 
 <script>
-import MusicList from "components/common/music-list/music-list.vue";
 import { mapGetters } from "vuex";
+import MusicList from "components/common/music-list/music-list.vue";
 import { getSingerDetail, getSingerZJData } from "api/singer";
 import { singerZJ } from "common/js/singer";
 import { createSong } from "common/js/song";
+// import { getSongVkey } from "api/song.js";
 import { ERR_OK } from "api/config";
 export default {
   props: {
@@ -38,9 +39,18 @@ export default {
     // 处理获的歌曲相关数据
     _normalizeSongs(list) {
       let ret = [];
+
       list.forEach(item => {
+        /* getSongVkey(item.musicData.songmid).then(res => {
+          let vk = res.data.items[0].vkey;
+          //   console.log(vk);
+          if (item.musicData.songid && item.musicData.albummid) {
+            ret.push(createSong(item.musicData, vk));
+          }
+        }); */
         ret.push(createSong(item.musicData));
       });
+      //   console.log(ret);
       return ret;
     },
     // 歌手专辑数据获取&处理

@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div ref="recommend" class="recommend">
     <scroll ref="scroll" :data="recommendData" class="recommend-content">
       <div>
         <!-- slider组件 -->
@@ -15,7 +15,12 @@
         <!-- loading 组件 -->
         <loading v-show="!recommendData.length"></loading>
         <div class="list" v-if="recommendData.length">
-          <div class="item" v-for="(item, index) in recommendData" :key="index">
+          <div
+            @click="selectItem(item)"
+            class="item"
+            v-for="(item, index) in recommendData"
+            :key="index"
+          >
             <div class="avatar">
               <img v-lazy="item.imgurl" alt>
             </div>
@@ -27,16 +32,20 @@
         </div>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import { getSlider, getRecommend } from "api/recommend";
-import { ERR_OK } from "api/config";
 import Slider from "components/base/slider/slider.vue";
 import Scroll from "components/base/scroll/scroll.vue";
 import Loading from "components/base/loading/loading.vue";
+import { ERR_OK } from "api/config";
+import { playlistMiXin } from "common/js/mixin.js";
 export default {
+  mixins: [playlistMiXin],
   data() {
     return {
       sliderData: [], //  轮播数据
@@ -45,6 +54,19 @@ export default {
     };
   },
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.recommend.style.bottom = bottom;
+      this.$refs.scroll.refresh();
+    },
+    //  歌单选择
+    selectItem(item) {
+      console.log(item);
+      this.$router.push({
+        path: `/recommend/${item.dissid}`
+      });
+      this.setDisc(item);
+    },
     //   请求轮播数据
     getSliderData() {
       getSlider().then(res => {
@@ -69,7 +91,10 @@ export default {
         this.$refs.scroll.refresh();
         this.checkedImgLoad = true;
       }
-    }
+    },
+    ...mapMutations({
+      setDisc: "SET_DISC"
+    })
   },
   created() {
     this.getSliderData();
@@ -87,7 +112,10 @@ export default {
 @import '../../common/stylus/variable.styl';
 
 .recommend {
-  position: relative;
+  position: fixed;
+  width: 100%;
+  top: 88px;
+  bottom: 0px;
 
   .recommend-content {
     width: 100%;

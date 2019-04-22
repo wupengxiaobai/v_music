@@ -8,3 +8,11 @@ body, html {
     background: $color-background;
     color: $color-text;
 }
+
+.clear-fix {
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}

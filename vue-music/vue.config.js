@@ -7,6 +7,7 @@ function resolve(dir) {
 
 module.exports = {
   devServer: {
+    port: 9000,
     before(app) {
       // 获取推荐数据
       app.get('/getRocommend', async (req, res) => {
@@ -54,7 +55,75 @@ module.exports = {
           console.log('err--', err)
         })
         res.send(ret)
-      })
+      });
+      // 获取歌词数据
+      app.get('/getLyric', async (req, res) => {
+        let ret = await axios({
+          method: 'get',
+          params: req.query,
+          url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          }
+        }).then(res => {
+          return res.data
+        }).catch(err => {
+          console.log('err--', err)
+        })
+        res.send(ret)
+      });
+      //  获取歌单详情数据
+      app.get('/getDisc', async (req, res) => {
+        let ret = await axios({
+          method: 'get',
+          params: req.query,
+          url: 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          }
+        }).then(res => {
+          return res.data
+        }).catch(err => {
+          console.log('err--', err)
+        })
+        res.send(ret)
+      });
+      //  获取搜索详情数据
+      app.get('/getSearchData', async (req, res) => {
+        let ret = await axios({
+          method: 'get',
+          params: req.query,
+          url: 'https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg',
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          }
+        }).then(res => {
+          return res.data
+        }).catch(err => {
+          console.log('err--', err)
+        })
+        res.send(ret)
+      });
+      //  获取歌曲详情
+      app.get('/getSongDetail', async (req, res) => {
+        let ret = await axios({
+          method: 'get',
+          params: req.query,
+          url: 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp',
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          }
+        }).then(res => {
+          return res.data
+        }).catch(err => {
+          console.log('err--', err)
+        })
+        res.send(ret)
+      });
     }
   },
   //   webpack 配置相对路径
@@ -63,5 +132,6 @@ module.exports = {
       .set('common', resolve('src/common'))
       .set('components', resolve('src/components'))
       .set('api', resolve('src/api'))
+      .set('public', resolve('src/../public'))
   }
 }

@@ -26,6 +26,7 @@ export default function jsonp(url, data, option) {
     })
   })
 }
+
 //  处理 query 参数
 function param(data) {
   let url = '';

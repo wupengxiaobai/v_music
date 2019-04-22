@@ -69,6 +69,9 @@ export default {
     };
   },
   methods: {
+    refresh() {
+      this.$refs.listView.refresh();
+    },
     //   事件派发给外部, 传递当前点击的元素
     selectItem(item) {
       this.$emit("selectItem", item);
@@ -109,7 +112,8 @@ export default {
         index = this.listHeight.length - 2;
       }
       //  指定scroll组件滚动到某位置
-      this.$refs.listView.scrollToElement(this.$refs.listGroup[index], 0);
+      this.$refs.listView &&
+        this.$refs.listView.scrollToElement(this.$refs.listGroup[index], 0);
     },
     // 计算 list-group 的高度集合数组
     _computedHeight() {

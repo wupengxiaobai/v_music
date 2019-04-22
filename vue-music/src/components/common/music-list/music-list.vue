@@ -1,4 +1,5 @@
 <template>
+  <!--  :style="wrapperStyle" -->
   <div class="music-list">
     <div class="back" @click="goback">
       <i class="icon-back"></i>
@@ -6,7 +7,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bg-img">
       <div class="play-wrapper">
-        <div ref="play" class="play" v-show="songs.length>0">
+        <div ref="play" class="play" v-show="songs.length>0" @click="randomItem">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -15,7 +16,7 @@
     </div>
     <!-- 背景层 -->
     <div class="lay-bg" ref="laybg"></div>
-    <!-- 滚动容器 -->
+    <!-- 滚动容器 :style="wrapperStyle"-->
     <scroll
       :probeType="3"
       :listenScroll="true"
@@ -25,7 +26,7 @@
       ref="list"
     >
       <div class="song-list-wrapper">
-        <song-list @select="selectItem" :songs="songs"></song-list>
+        <song-list :rank="rank" @select="selectItem" :songs="songs"></song-list>
       </div>
       <loading v-if="!songs.lenth"></loading>
     </scroll>
@@ -33,17 +34,24 @@
 </template>
 
 <script>
+import { playlistMiXin } from "common/js/mixin.js";
 import Scroll from "components/base/scroll/scroll.vue";
 import Loading from "components/base/loading/loading.vue";
 import SongList from "components/common/song-list/song-list.vue";
 import { prefixStyle } from "common/js/dom";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 const BOUNDARY__HEIGHT = 40; //  设定距离的高度
+const BOTTOM_HEIGHT = 60;
 const transform = prefixStyle("transform");
 const backdrop = prefixStyle("backdrop-filter");
 
 export default {
+  mixins: [playlistMiXin],
   props: {
+    rank: {
+      type: Boolean,
+      default: false
+    },
     bgImage: {
       type: String,
       default: ""
@@ -65,13 +73,20 @@ export default {
     };
   },
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.list.$el.style.bottom = bottom;
+      this.$refs.list.refresh();
+    },
+    randomItem() {
+      this.randomPlay({ list: this.songs });
+    },
     //   歌曲选择
     selectItem(item, index) {
       // 设置当前列表为播放列表
       // 设置当前列表为顺序播放列表
       // 设置播放器默认展开
       // 设置播放状态为true
-      //    ===>>  调用 vuex -> actions 一次性操作
       this.selectPlay({
         list: this.songs,
         index
@@ -85,12 +100,18 @@ export default {
     goback() {
       this.$router.back();
     },
-    ...mapActions(["selectPlay"])
+    ...mapActions(["selectPlay", "randomPlay"])
   },
   computed: {
     bgStyle() {
       return `background-image:url(${this.bgImage})`;
-    }
+    },
+    /* wrapperStyle() {
+      if (!this.fullScreen) {
+        return `bottom:${BOTTOM_HEIGHT}px`;
+      }
+    }, */
+    ...mapGetters(["fullScreen"])
   },
   watch: {
     scrollY(newY) {
